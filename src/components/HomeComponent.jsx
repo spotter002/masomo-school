@@ -102,7 +102,7 @@ const HomeComponents = () => {
             <div className="container">
                 <h2 className="text-success">Join Masomo School Today</h2>
                 <p>Enroll your child in a school that builds future-ready citizens</p>
-                <a href="" className="btn btn-success">Apply Now</a>
+                <a href="/register" className="btn btn-success">Apply Now</a>
             </div>
         </section>
 

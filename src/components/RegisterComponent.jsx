@@ -23,20 +23,31 @@ const RegisterComponent = () => {
         
     try {
             const data = {name,email,password,secretKey}
-            const res = await axios.post("https://schoolapi-qrlm.onrender.com/user/Auth/register",data)
-            // console.log("Registration",res.data)
-            if(res.data.newUser){
-            setLoading("")
-            setSuccess(res.data.message)
-            alert("Registration Successfull you will be directed to login page")
-            navigate('/login')
+            const response = await axios.post("https://schoolapi-qrlm.onrender.com/user/Auth/register",data)
+            console.log("Registration",response.data)
+
+            console.log(response.data.message)
+            if(response.data.newUser){
+                setLoading("")
+                setSuccess(response.data.message)
+                alert("Registration Successfull you will be directed to login page")
+                navigate('/login')
             }
+
             setLoading("")
-            setError(res.data.message)
+            
+            setError(response.data.message)
         } catch (error) {
-            setError(error.message)
-            setLoading("")
-        }
+            if (error.response) {
+                // Server responded with a status outside 2xx
+                console.error("Error response:", error.response);
+                setError(error.response.data.message || "Something went wrong!");
+                setLoading("")
+            } else {
+                // Network error or something else
+                setError(error.message || "Unexpected error!");
+                setLoading("")
+            }}
     }
   return (
     <div className='container mt-5 ' style={{maxWidth:'500px'}}>
