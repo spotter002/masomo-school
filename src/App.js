@@ -1,20 +1,29 @@
 // import logo from './logo.svg';
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import  'bootstrap/dist/js/bootstrap.min.js';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomeComponent from './components/HomeComponent';
+import'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'bootstrap-icons/font/bootstrap-icons.css'
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import HomeComponents from './components/HomeComponent';
+import LoginComponent from './components/loginController';
+import NotAuthorized from './components/NotAuthorized';
+import NotFound from './components/NotFoundController';
+import RegisterComponent from './components/RegisterComponent';
+
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomeComponent />} />
-        <Route path="/about" element={<h1>About</h1>} />
-        <Route path="/contact" element={<h1>Contact</h1>} />
-      </Routes>
+        <Route path="/" element={<HomeComponents/>} />
+        <Route path='/register' element={<RegisterComponent/>}/>
+        <Route path='/login' element={<LoginComponent/>}/>
+        {/* default routes */}
+        <Route path='/not-authorized' element={<NotAuthorized/>}/>
+        <Route path='*' element={<NotFound/>} />
+
+        </Routes>
     </Router>
   );
 }
