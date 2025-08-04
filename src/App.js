@@ -13,6 +13,10 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoutes from './context/ProtectedRoutes';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import AdminLayout from './components/Admin/AdminLayout';
+import Classes from './components/Admin/Classes';
+import Teacher from './components/Admin/Teacher';
+import Student from './components/Admin/Student';
+import Parent from './components/Admin/Parent';
 
 
 
@@ -31,6 +35,10 @@ function App() {
         </ProtectedRoutes>}>
 
         <Route path='' element={<AdminDashboard/>} />
+        <Route path='classes' element={<Classes/>} />
+        <Route path='teachers' element={<Teacher/>} />
+        <Route path='students' element={<Student/>} />
+        <Route path='parents' element={<Parent/>} />
         </Route>
 
         <Route path='/register' element={<RegisterComponent/>}/>
