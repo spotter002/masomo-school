@@ -17,6 +17,8 @@ import Classes from './components/Admin/Classes';
 import Teacher from './components/Admin/Teacher';
 import Student from './components/Admin/Student';
 import Parent from './components/Admin/Parent';
+import ClassAdd from './components/Admin/Forms/ClassAdd';
+import ClassEdit from './components/Admin/Forms/ClassEdit';
 
 
 
@@ -35,7 +37,11 @@ function App() {
         </ProtectedRoutes>}>
 
         <Route path='' element={<AdminDashboard/>} />
+
         <Route path='classes' element={<Classes/>} />
+        <Route path='classes/add' element={<ClassAdd/>} />
+        <Route path='classes/edit' element={<ClassEdit/>} />
+        
         <Route path='teachers' element={<Teacher/>} />
         <Route path='students' element={<Student/>} />
         <Route path='parents' element={<Parent/>} />
