@@ -54,6 +54,22 @@ const ClassEdit = () => {
         setClassYear(selectedClass?.classYear||'')
         setSelectedTeacherIds(selectedClass?.teacher||'')
     },[selectedClass , navigate])
+
+     const handleSubmit=async(e)=>{
+        e.preventDefault()
+        try {
+            toast.info('Updating class...')
+            const data={name,gradeLevel,classYear,teacher:selectedTeacherIds}
+            const res=await axios.put(`https://schoolapi-qrlm.onrender.com/class/${selectedClass._id}`,data,authHeader)
+            toast.dismiss()
+            toast.success('Class updated successfully')
+            navigate('/admin-dashboard/classes')
+        } catch (error) {
+            toast.dismiss()
+            toast.error(error.response?.data?.message || 'Something went wrong when updating class')
+            console.log(error)
+        }
+        }
   return (
       <div className='container'>
              <ToastContainer position='top-right' autoClose={3000}/>
@@ -76,7 +92,7 @@ const ClassEdit = () => {
     
             {/* form to post class */}
     
-            <form action="">
+            <form onSubmit={handleSubmit}>
                 <div className="row">
                     <div className="col-md-6 mb-3">
                         <input type="text" className='form-control' placeholder='Class Name' value={name} onChange={(e)=>setName(e.target.value)} required />

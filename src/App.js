@@ -19,8 +19,8 @@ import Student from './components/Admin/Student';
 import Parent from './components/Admin/Parent';
 import ClassAdd from './components/Admin/Forms/ClassAdd';
 import ClassEdit from './components/Admin/Forms/ClassEdit';
-
-
+import AddTeacher from './components/Admin/Forms/TeacherAdd';
+import EditTeacher from './components/Admin/Forms/TeacherEdit';
 
 function App() {
   return (
@@ -41,8 +41,12 @@ function App() {
         <Route path='classes' element={<Classes/>} />
         <Route path='classes/add' element={<ClassAdd/>} />
         <Route path='classes/edit' element={<ClassEdit/>} />
-        
+
         <Route path='teachers' element={<Teacher/>} />
+        <Route path='teachers/add' element={<AddTeacher/>} />
+        <Route path='teachers/edit' element={<EditTeacher/>} />
+        
+
         <Route path='students' element={<Student/>} />
         <Route path='parents' element={<Parent/>} />
         </Route>
