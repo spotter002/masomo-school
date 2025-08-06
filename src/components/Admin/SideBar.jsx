@@ -6,7 +6,7 @@ const SideBar = () => {
     <div className='text-light d-flex flex-column p-3' style={{width:'200px',background:'linear-gradient(135deg, rgb(12,79,46), rgb(54,66,159))'}
     }>
         <h3 className='text-center mb-4'>
-            <i className='bi bi-speedometer2 me-3'> Panel</i>Admin</h3>
+            <i className='bi bi-speedometer2 me-3'> </i>Admin Panel</h3>
 
         <ul className='nav nav-pills flex-column mb-auto'>
             <li className='nav-item mb-3'>

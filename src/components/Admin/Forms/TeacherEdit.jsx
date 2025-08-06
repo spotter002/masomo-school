@@ -34,7 +34,7 @@ const EditTeacher = () => {
     e.preventDefault();
     try {
       toast.info('Updating teacher...');
-      await axios.put(`https://schoolapi-qrlm.onrender.com/teacher/self`, formData, {
+      await axios.put(`https://schoolapi-qrlm.onrender.com/teacher/${teacherData._id}`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.dismiss();
@@ -42,8 +42,7 @@ const EditTeacher = () => {
       navigate('/admin-dashboard/teachers');
     } catch (error) {
       toast.dismiss();
-      toast.error(error.response?.data?.message || 'Error updating teacher');
-      console.error(error);
+      toast.error(error.response?.data?.message || 'Error updating teacher')
     }
   };
 

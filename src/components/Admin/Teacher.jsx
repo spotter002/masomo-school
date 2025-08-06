@@ -23,7 +23,7 @@ const TeacherList = () => {
         } catch (error) {
             toast.dismiss()
             toast.error(error.response?.data?.message || 'Something went wrong when fetching teacher')
-            console.log(error)
+            
         }
     }
     useEffect(() => {
