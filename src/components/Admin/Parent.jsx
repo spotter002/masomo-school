@@ -26,6 +26,9 @@ const ParentList = () => {
       toast.error("Failed to load parents");
     }
   };
+  useEffect(() => {
+    fetchParents();
+  }, []);
 
   const handleDelete = async (id) => {
     if (!window.confirm("Sure you wanna delete this parent?")) return;
@@ -45,9 +48,6 @@ const ParentList = () => {
     navigate(`/admin-dashboard/parents/edit`, { state: { parentData } });
   };
 
-  useEffect(() => {
-    fetchParents();
-  }, []);
 
   return (
     <div className="container mt-2">

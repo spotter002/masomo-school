@@ -31,6 +31,8 @@ const Student = () => {
     FetchStudents();
   }, []);
 
+  
+
   const handleDelete = async (id) => {
     if (!window.confirm("Sure you wanna delete this Student?")) return;
     try {

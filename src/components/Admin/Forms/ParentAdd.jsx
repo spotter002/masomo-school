@@ -31,7 +31,7 @@ const ParentAdd = () => {
     try {
       const res = await axios.post('https://schoolapi-qrlm.onrender.com/parent/addParent', form, authHeader);
       toast.success('Parent added successfully!');
-      navigate('/admin-dashboard/parents');
+      navigate('/admin-dashboard/students/add');
     } catch (error) {
       toast.error(error.response?.data?.message || 'Error adding parent');
     }

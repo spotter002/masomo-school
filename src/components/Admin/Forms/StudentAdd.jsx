@@ -1,5 +1,4 @@
-// StudentAdd.jsx
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
@@ -10,38 +9,72 @@ const StudentAdd = () => {
   const { token } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    name: '',
-    admissionNumber: '',
-    dateOfBirth: '',
-    gender: 'Male',
-    classroom: '',
-    parent: '',
-    photo: null,
-  });
+  const [classroom, setClassroom] = useState([]);
+  const [parentDetails, setParentDetails] = useState(null);
+  const [selectedClassId, setSelectedClassId] = useState('');
+
+  // 💡 Individual state vars
+  const [name, setName] = useState('');
+  const [admissionNumber, setAdmissionNumber] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [gender, setGender] = useState('Male');
+  const [parent, setParent] = useState('');
+  const [photo, setPhoto] = useState(null);
 
   const authHeader = {
     headers: { Authorization: `Bearer ${token}` }
   };
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === 'photo') {
-      setFormData({ ...formData, photo: files[0] });
-    } else {
-      setFormData({ ...formData, [name]: value });
+  useEffect(() => {
+    const FetchClasses = async () => {
+      try {
+        toast.info('Fetching classes...');
+        const res = await axios.get('https://schoolapi-qrlm.onrender.com/class/', authHeader);
+        setClassroom(res.data.classrooms);
+        toast.dismiss();
+        toast.success('Classes fetched successfully');
+      } catch (error) {
+        toast.dismiss();
+        toast.error(error.response?.data?.message || 'Something went wrong when fetching classes');
+      }
+    };
+    FetchClasses();
+  }, []);
+
+  const verifyParent = async () => {
+    try {
+      toast.info('Verifying parent...');
+      const res = await axios.get(`https://schoolapi-qrlm.onrender.com/parent/${parent}`, authHeader);
+      setParentDetails(res.data);
+      toast.dismiss();
+      toast.success('Parent verified successfully');
+    } catch (error) {
+      setParentDetails(null);
+      toast.dismiss();
+      toast.error(error.response?.data?.message || 'Something went wrong when verifying parent');
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const studentData = new FormData();
-    for (let key in formData) {
-      studentData.append(key, formData[key]);
-    }
+    studentData.append('name', name);
+    studentData.append('dateOfBirth', dateOfBirth);
+    studentData.append('admissionNumber', admissionNumber);
+    studentData.append('gender', gender);
+    studentData.append('classroomID', selectedClassId);
+    studentData.append('parentNationalId', parent);
+
+    if (photo) studentData.append('photo', photo);
+
+
+    for (let [key, value] of studentData.entries()) {
+  console.log(key, value);
+}
+
     try {
       toast.info("Adding student...");
-      await axios.post("https://schoolapi-qrlm.onrender.com/student", studentData, {
+      await axios.post("https://schoolapi-qrlm.onrender.com/student/addStudent", studentData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
@@ -61,18 +94,110 @@ const StudentAdd = () => {
       <ToastContainer position="top-right" autoClose={3000} />
       <h3>Add Student</h3>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Student Name" required className="form-control mb-2" />
-        <input type="text" name="admissionNumber" value={formData.admissionNumber} onChange={handleChange} placeholder="Admission Number" required className="form-control mb-2" />
-        <input type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} className="form-control mb-2" required />
-        <select name="gender" value={formData.gender} onChange={handleChange} className="form-control mb-2">
-          <option>Male</option>
-          <option>Female</option>
-        </select>
-        <input type="text" name="classroom" value={formData.classroom} onChange={handleChange} placeholder="Classroom ID" required className="form-control mb-2" />
-        <input type="text" name="parent" value={formData.parent} onChange={handleChange} placeholder="Parent ID" required className="form-control mb-2" />
-        <input type="file" name="photo" onChange={handleChange} className="form-control mb-2" accept="image/*" />
-        <button className="btn btn-success" type="submit">Add Student</button>
+        <div>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Student Name"
+            required
+            className="form-control mb-2"
+          />
+        </div>
+
+        <div>
+          <input
+            type="text"
+            value={admissionNumber}
+            onChange={(e) => setAdmissionNumber(e.target.value)}
+            placeholder="Admission Number"
+            required
+            className="form-control mb-2"
+          />
+        </div>
+
+        <div>
+          <input
+            type="date"
+            value={dateOfBirth}
+            onChange={(e) => setDateOfBirth(e.target.value)}
+            className="form-control mb-2"
+            required
+          />
+        </div>
+
+        <div>
+          <select
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            className="form-control mb-2"
+          >
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+        </div>
+
+        <div>
+          <select
+            className="form-select mb-2"
+            value={selectedClassId}
+            onChange={(e) => setSelectedClassId(e.target.value)}
+          >
+            <option value="">Select Classroom</option>
+            {classroom.map((c) => (
+              <option key={c._id} value={c._id}>
+                {`${c.name}, ${c.gradeLevel}, ${c.classYear}`}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div style={{ position: 'relative' }}>
+          <input
+            type="text"
+            value={parent}
+            onChange={(e) => setParent(e.target.value)}
+            placeholder="Parent ID"
+            required
+            className="form-control mb-2"
+          />
+          <i
+            className="bi bi-search"
+            onClick={verifyParent}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              right: '10px',
+              transform: 'translateY(-50%)',
+              cursor: 'pointer',
+              color: 'green',
+              fontSize: '1.2rem',
+              pointerEvents: 'auto'
+            }}
+            title="Verify Parent"
+          ></i>
+        </div>
+
+        <div>
+          <input
+            type="file"
+            onChange={(e) => setPhoto(e.target.files[0])}
+            className="form-control mb-2"
+            accept="image/*"
+          />
+        </div>
+
+        <button className="btn btn-success" type="submit">
+          Add Student
+        </button>
       </form>
+
+      {parentDetails && (
+        <div className="alert alert-info mt-3">
+          <strong>Parent Name:</strong> {parentDetails.name} <br />
+          <strong>Email:</strong> {parentDetails.email}
+        </div>
+      )}
     </div>
   );
 };
